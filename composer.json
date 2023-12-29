@@ -31,7 +31,8 @@
         "topthink/think-template": "^3.0",
         "topthink/think-view": "^2.0",
         "nesbot/carbon": "^2.71",
-        "overtrue/pinyin": "5.0"
+        "overtrue/pinyin": "5.0",
+        "yzh52521/migrate-schema": "^1.0"
     },
     "require-dev": {
         "symfony/var-dumper": ">=4.2",

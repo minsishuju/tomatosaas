@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'yzh52521\\migrate\\' => array($vendorDir . '/yzh52521/migrate-schema/src'),
     'think\\view\\driver\\' => array($vendorDir . '/topthink/think-view/src'),
     'think\\trace\\' => array($vendorDir . '/topthink/think-trace/src'),
     'think\\migration\\' => array($vendorDir . '/topthink/think-migration/src'),

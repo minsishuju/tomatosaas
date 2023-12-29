@@ -18,6 +18,10 @@ class ComposerStaticInit2c0d4a90e1f6fc16fb318d8da2dd5732
     );
 
     public static $prefixLengthsPsr4 = array (
+        'y' => 
+        array (
+            'yzh52521\\migrate\\' => 17,
+        ),
         't' => 
         array (
             'think\\view\\driver\\' => 18,
@@ -83,6 +87,10 @@ class ComposerStaticInit2c0d4a90e1f6fc16fb318d8da2dd5732
     );
 
     public static $prefixDirsPsr4 = array (
+        'yzh52521\\migrate\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yzh52521/migrate-schema/src',
+        ),
         'think\\view\\driver\\' => 
         array (
             0 => __DIR__ . '/..' . '/topthink/think-view/src',

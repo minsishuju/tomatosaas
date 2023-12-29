@@ -2254,6 +2254,50 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "install-path": "../webmozart/assert"
+        },
+        {
+            "name": "yzh52521/migrate-schema",
+            "version": "v1.0.1",
+            "version_normalized": "1.0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yuanzhihai/migrate-schema.git",
+                "reference": "3e39be8239426abe8e9227409545c67db5b2fb58"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yuanzhihai/migrate-schema/zipball/3e39be8239426abe8e9227409545c67db5b2fb58",
+                "reference": "3e39be8239426abe8e9227409545c67db5b2fb58",
+                "shasum": ""
+            },
+            "require": {
+                "topthink/framework": "^6.0|^8.0",
+                "topthink/think-migration": "^3.0"
+            },
+            "time": "2023-09-08T01:33:25+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "yzh52521\\migrate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "yzh52521",
+                    "email": "396751927@qq.com"
+                }
+            ],
+            "description": "易使用漂亮的数据库迁移代码构建器",
+            "support": {
+                "issues": "https://github.com/yuanzhihai/migrate-schema/issues",
+                "source": "https://github.com/yuanzhihai/migrate-schema/tree/v1.0.1"
+            },
+            "install-path": "../yzh52521/migrate-schema"
         }
     ],
     "dev": true,
