@@ -1,7 +1,7 @@
 <?php declare (strict_types=1);
 
-namespace app\common\service;
-class CaptchaService
+namespace app\common\library;
+class Captcha
 {
     /**
      * 生成验证码
