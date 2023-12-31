@@ -10,10 +10,10 @@
 </head>
 
 <body>
-	<div class="login-page" style="background-image: url(__IMG__/background.svg)">
+	<div class="login-page" style="background-image: url(__IMG__/login/background.svg)">
 		<div class="layui-row">
 			<div class="layui-col-sm6 login-bg">
-				<img class="login-bg-img" src="__IMG__/banner.png" alt="" />
+				<img class="login-bg-img" src="__IMG__/login/banner.png" alt="" />
 			</div>
 			<div class="layui-col-sm6 login-form">
 				<div class="layui-form">
@@ -57,7 +57,7 @@
 												class="layui-input">
 										</div>
 									</div>
-									<img src="__IMG__/captcha.gif" alt=""
+									<img src="__IMG__/login/captcha.gif" alt=""
 										class="verification-img" />
 								</div>
 								<div class="layui-form-item">
@@ -105,7 +105,7 @@
 					time: 1500,
 					done: function () {
 						popup.success("登录成功", function () {
-							location.href = "./index.html"
+							location.href = "../index.html"
 						});
 					}
 				})
@@ -115,5 +115,4 @@
 		})
 	</script>
 </body>
-
 </html>

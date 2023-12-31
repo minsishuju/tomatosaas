@@ -7,6 +7,6 @@ class LoginController extends BaseController
 {
     public function index()
     {
-        return view('./login');
+        return view('/login/old');
     }
 }
