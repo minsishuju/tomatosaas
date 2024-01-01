@@ -7,19 +7,15 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 			yaml = layui.yaml,
 			page = layui.page,
 			menu = layui.menu,
+			tabPage = layui.tabPage,
 			messageCenter = layui.messageCenter,
 			menuSearch = layui.menuSearch,
 			fullscreen = layui.fullscreen,
-			tools = layui.tools,
-			tabPage = layui.tabPage;
-
-		var sideMenu;
+			tools = layui.tools;
 
 		var configurationCache;
 
-		var bodyTabPage;
-
-		var bodyPage;
+		var instances = {};
 
 		var logout = function () { };
 
@@ -125,10 +121,10 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 			this.menuSearchRender = function (options) {
 				menuSearch.render({
 					elem: ".menuSearch",
-					dataProvider: () => sideMenu.cache(),
+					dataProvider: () => instances.menu.cache(),
 					select: (node) => {
 						if (node.type == "1") {
-							sideMenu.selectItem(node.id);
+							instances.menu.selectItem(node.id);
 							if (node.openType === "_layer") {
 								layer.open({
 									type: 2,
@@ -140,7 +136,7 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 							} else {
 								if (isMuiltTab(options) === "true" ||
 									isMuiltTab(options) === true) {
-									bodyTabPage.changePage({
+									instances.tabPage.changePage({
 										id: node.id,
 										title: node.title,
 										type: node.openType,
@@ -148,7 +144,7 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 										close: true
 									});
 								} else {
-									bodyPage.changePage({
+									instances.page.changePage({
 										href: node.url,
 										type: node.openType
 									});
@@ -183,8 +179,8 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 			 * 侧边菜单
 			 */
 			this.menuRender = function (param) {
-				sideMenu = menu.render({
-					elem: 'sideMenu',
+				instances.menu = menu.render({
+					elem: 'side',
 					async: param.menu.async,
 					method: param.menu.method,
 					control: isControl(param) === 'true' || isControl(param) === true ? 'control' : false,
@@ -198,8 +194,8 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 						compatible();
 					},
 					done: function () {
-						sideMenu.isCollapse = param.menu.collapse;
-						sideMenu.selectItem(param.menu.select);
+						instances.menu.isCollapse = param.menu.collapse;
+						instances.menu.selectItem(param.menu.select);
 						if (param.menu.collapse) {
 							if ($(window).width() >= 768) {
 								collapse()
@@ -222,14 +218,14 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 
 				if (isMuiltTab(param) === "true" || isMuiltTab(param) === true) {
 
-					bodyTabPage = tabPage.render({
+					instances.tabPage = tabPage.render({
 						elem: 'content',
 						session: param.tab.session,
 						index: 0,
 						tabMax: param.tab.max,
 						preload: param.tab.preload,
 						closeEvent: function (id) {
-							sideMenu.selectItem(id);
+							instances.menu.selectItem(id);
 						},
 						data: [{
 							id: param.tab.index.id,
@@ -240,26 +236,26 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 						success: function (id) {
 							if (param.tab.session) {
 								setTimeout(function () {
-									sideMenu.selectItem(id);
-									bodyTabPage.positionTab();
+									instances.menu.selectItem(id);
+									instances.tabPage.positionTab();
 								}, 500)
 							}
 						}
 					});
 
-					bodyTabPage.click(function (id) {
+					instances.tabPage.click(function (id) {
 						if (!param.tab.keepState) {
-							bodyTabPage.refresh(false);
+							instances.tabPage.refresh(false);
 						}
-						bodyTabPage.positionTab();
-						sideMenu.selectItem(id);
+						instances.tabPage.positionTab();
+						instances.menu.selectItem(id);
 					})
 
-					sideMenu.click(function (dom, data) {
+					instances.menu.click(function (dom, data) {
 						if (data.menuOpenType === "_layer") {
 							layer.open({ type: 2, title: data.menuTitle, content: data.menuUrl, area: ['80%', '80%'], maxmin: true })
 						} else {
-							bodyTabPage.changePage({
+							instances.tabPage.changePage({
 								id: data.menuId,
 								title: data.menuTitle,
 								type: data.menuOpenType,
@@ -272,17 +268,17 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 
 				} else {
 
-					bodyPage = page.render({
+					instances.page = page.render({
 						elem: 'content',
 						title: '首页',
 						url: param.tab.index.href
 					});
 
-					sideMenu.click(function (dom, data) {
+					instances.menu.click(function (dom, data) {
 						if (data.menuOpenType === "_layer") {
 							layer.open({ type: 2, title: data.menuTitle, content: data.menuUrl, area: ['80%', '80%'], maxmin: true })
 						} else {
-							bodyPage.changePage({ href: data.menuUrl, type: data.menuOpenType });
+							instances.page.changePage({ href: data.menuUrl, type: data.menuOpenType });
 						}
 						compatible()
 					})
@@ -459,7 +455,7 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 			 * @param callback 实现
 			 */
 			this.logout = function (callback) {
-				if(callback != undefined) {
+				if (callback != undefined) {
 					logout = callback;
 				}
 			}
@@ -473,8 +469,8 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 				var refreshBtn = $(".refresh a");
 				refreshBtn.addClass("layui-anim layui-anim-rotate layui-anim-loop layui-icon-loading");
 				refreshBtn.removeClass("layui-icon-refresh-1");
-				if (isMuiltTab(configurationCache) === "true" || isMuiltTab(configurationCache) === true) bodyTabPage.refresh(true);
-				else bodyPage.refresh(true);
+				if (isMuiltTab(configurationCache) === "true" || isMuiltTab(configurationCache) === true) instances.tabPage.refresh(true);
+				else instances.page.refresh(true);
 				setTimeout(function () {
 					refreshBtn.removeClass("layui-anim layui-anim-rotate layui-anim-loop layui-icon-loading");
 					refreshBtn.addClass("layui-icon-refresh-1");
@@ -490,11 +486,12 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 			 */
 			this.changePage = function (data) {
 				if (isMuiltTab(configurationCache) === "true" || isMuiltTab(configurationCache) === true) {
-					bodyTabPage.changePage({ id: data.id, title: data.title, url: data.url, type: data.type, close: true });
+					instances.tabPage.changePage({ id: data.id, title: data.title, url: data.url, type: data.type, close: true });
 				} else {
-					bodyPage.changePage({ href: data.url, type: data.type });
+					instances.page.changePage({ href: data.url, type: data.type });
 				}
 			}
+
 		};
 
 		/**
@@ -503,7 +500,7 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 		 * 菜单折叠
 		 */
 		function collapse() {
-			sideMenu.collapse();
+			instances.menu.collapse();
 			var admin = $(".pear-admin");
 			var left = $(".layui-icon-spread-left")
 			var right = $(".layui-icon-shrink-right")
@@ -511,12 +508,12 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 				left.addClass("layui-icon-shrink-right")
 				left.removeClass("layui-icon-spread-left")
 				admin.removeClass("pear-mini");
-				sideMenu.isCollapse = false;
+				instances.menu.isCollapse = false;
 			} else {
 				right.addClass("layui-icon-spread-left")
 				right.removeClass("layui-icon-shrink-right")
 				admin.addClass("pear-mini");
-				sideMenu.isCollapse = true;
+				instances.menu.isCollapse = true;
 			}
 		}
 
@@ -525,7 +522,7 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 		 * 
 		 * 使用 admin.logout(Function) 实现注销 
 		 * 
-		 * Promise<boolean> 作为返回值类型时，泛型内容为 true 时视为注销成功，则清除 bodyTabPage 缓存
+		 * Promise<boolean> 作为返回值类型时，泛型内容为 true 时视为注销成功，则清除 instances.tabPage 缓存
 		 * 
 		 * 否则视为注销失败，不做任何处置。
 		 */
@@ -534,14 +531,14 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 			if (promise != undefined) {
 				promise.then((asyncResult) => {
 					if (asyncResult) {
-						if (bodyTabPage != undefined) {
-							bodyTabPage.clear();
+						if (instances.tabPage != undefined) {
+							instances.tabPage.clear();
 						}
 					}
 				})
 			} else {
-				if (bodyTabPage != undefined) {
-					bodyTabPage.clear();
+				if (instances.tabPage != undefined) {
+					instances.tabPage.clear();
 				}
 			}
 		})
@@ -564,14 +561,14 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 
 		body.on("click", '[user-menu-id]', function () {
 			if (isMuiltTab(configurationCache) === "true" || isMuiltTab(configurationCache) === true) {
-				bodyTabPage.changePage({
+				instances.tabPage.changePage({
 					id: $(this).attr("user-menu-id"),
 					title: $(this).attr("user-menu-title"),
 					url: $(this).attr("user-menu-url"),
 					close: true
 				}, 300);
 			} else {
-				bodyPage.changePage({
+				instances.page.changePage({
 					href: $(this).attr("user-menu-url"),
 					type: "_component"
 				}, true);
@@ -637,19 +634,19 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 				'</div>';
 
 			var moreItem =
-				'<div class="layui-form-item"><div class="layui-input-inline" style="width:200px;"><input type="checkbox" name="control" lay-filter="control" lay-skin="switch" lay-text="开|关"></div><span class="set-text">菜单分割</span></div>';
+				'<div class="layui-form-item"><div class="layui-input-inline" style="width:200px;"><input type="checkbox" name="control" lay-filter="control" lay-skin="switch"></div><span class="set-text">菜单分割</span></div>';
 
 			moreItem +=
-				'<div class="layui-form-item"><div class="layui-input-inline" style="width:200px;"><input type="checkbox" name="muilt-tab" lay-filter="muilt-tab" lay-skin="switch" lay-text="开|关"></div><span class="set-text">多选项卡</span></div>';
+				'<div class="layui-form-item"><div class="layui-input-inline" style="width:200px;"><input type="checkbox" name="muilt-tab" lay-filter="muilt-tab" lay-skin="switch"></div><span class="set-text">多选项卡</span></div>';
 
 			moreItem +=
-				'<div class="layui-form-item"><div class="layui-input-inline" style="width:200px;"><input type="checkbox" name="banner" lay-filter="banner" lay-skin="switch" lay-text="开|关"></div><span class="set-text">通栏布局</span></div>';
+				'<div class="layui-form-item"><div class="layui-input-inline" style="width:200px;"><input type="checkbox" name="banner" lay-filter="banner" lay-skin="switch"></div><span class="set-text">通栏布局</span></div>';
 
 			moreItem +=
-				'<div class="layui-form-item"><div class="layui-input-inline" style="width:200px;"><input type="checkbox" name="footer" lay-filter="footer" lay-skin="switch" lay-text="开|关"></div><span class="set-text">开启页脚</span></div>';
+				'<div class="layui-form-item"><div class="layui-input-inline" style="width:200px;"><input type="checkbox" name="footer" lay-filter="footer" lay-skin="switch"></div><span class="set-text">开启页脚</span></div>';
 
 			moreItem +=
-				'<div class="layui-form-item"><div class="layui-input-inline" style="width:200px;"><input type="checkbox" name="dark" lay-filter="dark" lay-skin="switch" lay-text="开|关"></div><span class="set-text">夜间模式</span></div>';
+				'<div class="layui-form-item"><div class="layui-input-inline" style="width:200px;"><input type="checkbox" name="dark" lay-filter="dark" lay-skin="switch"></div><span class="set-text">夜间模式</span></div>';
 
 			var moreHtml = '<br><div class="pearone-color">\n' +
 				'<div class="color-title">更多设置</div>\n' +
@@ -867,7 +864,7 @@ layui.define(['jquery', 'tools', 'element', 'yaml', 'form', 'tabPage', 'menu', '
 		}
 
 		$(window).on('resize', tools.debounce(function () {
-			if (sideMenu && !sideMenu.isCollapse && $(window).width() <= 768) {
+			if (instances.menu && !instances.menu.isCollapse && $(window).width() <= 768) {
 				collapse();
 			}
 		}, 50));

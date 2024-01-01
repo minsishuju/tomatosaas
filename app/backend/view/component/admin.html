@@ -1,0 +1,41 @@
+<html>
+
+<body>
+    <div class="pear-container">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <button class="layui-btn refresh">刷新页面</button>
+                <button class="layui-btn changePage">切换页面</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    layui.use(['jquery'], function() {
+            var $ = layui.jquery;
+
+            /**
+             * 刷新页面
+             * 
+             * @param null
+             */
+			$(".refresh").click(function() {
+				PearAdmin.refresh();
+			});
+
+            /**
+             * 切换页面
+             * 
+             * @param id 页面编号
+             * @param title 页面标题
+             * @param url 页面路径
+             * @param type 渲染方式
+             */
+            $(".changePage").click(function() {
+                PearAdmin.changePage({ id: "999", title: "New Page", type: "_iframe", url: "http://www.layui-vue.com"});
+            });
+		});
+</script>
+
+</html>
