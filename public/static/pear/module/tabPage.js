@@ -374,10 +374,10 @@ layui.define(['jquery', 'element', 'dropdown'], function (exports) {
 			});
 		}
 
-		if($iframe.attr("type") === "_iframe") {
+		if ($iframe.attr("type") === "_iframe") {
 			$iframe.attr("src", $iframe.attr("src"));
-			$iframe.on("load", function() {
-				$iframeLoad.fadeOut(1000, function() {
+			$iframe.on("load", function () {
+				$iframeLoad.fadeOut(1000, function () {
 					$iframeLoad.remove();
 				});
 			})

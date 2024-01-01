@@ -31,13 +31,9 @@ layui.define(['jquery', 'element'], function (exports) {
 	 * 切换 Page 页面 
 	 */
 	page.prototype.changePage = function (options) {
-		
 		const $frame = $(`#${this.option.elem} .pear-page-content`);
-
 		if (options.type === "_iframe") {
-		
 			$frame.html(`<iframe src='${options.href}' scrolling='auto' frameborder='0' allowfullscreen='true'></iframe>`);
-		
 		} else {
 			$.ajax({
 				url: options.href,
@@ -56,26 +52,19 @@ layui.define(['jquery', 'element'], function (exports) {
 	}
 
 	page.prototype.refresh = function (loading) {
-
 		var $frameLoad = $(`#${this.option.elem} .pear-page-loading`);
 		var $frame = $(`#${this.option.elem} .pear-page-content`);
-
 		if (loading) {
 			$frameLoad.css({
 				display: 'block'
 			});
 		}
-
 		if ($frame.attr("type") === "_iframe") {
-
 			$frame.html(`<iframe src='${$frame.attr("href")}' scrolling='auto' frameborder='0' allowfullscreen='true'></iframe>`);
-
 			const $contentFrame = $frame.find("iframe");
-
 			$contentFrame.on("load", () => {
 				$frameLoad.fadeOut(1000);
 			})
-
 		} else {
 			$.ajax({
 				type: 'get',
@@ -94,7 +83,6 @@ layui.define(['jquery', 'element'], function (exports) {
 	}
 
 	function renderContent(option) {
-
 		$("#" + option.elem).html(`
 			<div class='pear-page'>
 				<div class='pear-page-content' type='${option.type}' href='${option.url}'></div>
@@ -111,7 +99,6 @@ layui.define(['jquery', 'element'], function (exports) {
 		var $frame = $("#" + option.elem).find(".pear-page-content");
 
 		if (option.type === "_iframe") {
-
 			$frame.html(`<iframe src='${option.url}' scrolling='auto' frameborder='0' allowfullscreen='true'></iframe>`);
 		} else {
 			$.ajax({

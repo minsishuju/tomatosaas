@@ -1,16 +1,11 @@
-html,
-body,
+html,body{height: 100%;}
+.login-page {width: 100%;height: 100%;overflow-x: hidden;overflow-y: auto;display: flex;justify-content: center;align-items: center;}
 .layui-row {
-	height: 100%;
+	width: 1000px;
+	height: 600px;
+	box-shadow: 0 2px 25px rgba(0, 0, 0, 0.4), 0 0 2px rgba(0, 0, 0, 0.2), 0 0 2px rgba(0, 0, 0, 0.2);
+	border-radius: 15px;
 }
-
-.login-page {
-	width: 100%;
-	height: 100%;
-	overflow-x: hidden;
-	overflow-y: auto;
-}
-
 .login-bg {
 	height: 100%;
 	box-sizing: border-box;
@@ -18,6 +13,8 @@ body,
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	border-bottom-left-radius: 15px;
+	border-top-left-radius: 15px;
 }
 
 .login-bg-img {
@@ -33,6 +30,8 @@ body,
 	align-items: center;
 	justify-content: center;
 	background-color: #fff;
+	border-bottom-right-radius: 15px;
+	border-top-right-radius: 15px;
 }
 
 .form-center {
@@ -179,4 +178,25 @@ body,
 .layui-btn {
 	border-radius: 4px;
 	background-color: var(--global-primary-color);
+}
+@media(min-width: 992px) and  (max-width:1200px){
+	.layui-row{
+		width: 900px;
+	}
+}
+@media(min-width: 768px) and (max-width:992px){
+	.layui-row{
+		width: 90%;
+	}
+	.form-center{width: 90%;}
+}
+@media (max-width:768px){
+	.layui-row{
+		width: 90%;
+	}
+	.login-form {
+		border-bottom-left-radius: 15px;
+		border-top-left-radius: 15px;
+	}
+	.form-center-box{width: 95%;}
 }
