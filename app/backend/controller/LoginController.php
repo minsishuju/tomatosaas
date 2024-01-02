@@ -20,7 +20,6 @@ class LoginController extends BaseController
     */
     public function captcha()
     {
-        ob_clean();
         $Captcha=new CaptchaService();
         return $Captcha->create();
     }

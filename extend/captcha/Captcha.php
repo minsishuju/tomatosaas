@@ -38,7 +38,9 @@ class Captcha
         $this->font = dirname(__FILE__) . '/Font/captcha'.rand(0,5).'.ttf';
     }
 
-    // 生成随机码
+    /**
+     * 生成随机内容
+    */
     private function createCode()
     {
         $this->charset = str_shuffle($this->charset);
@@ -48,7 +50,9 @@ class Captcha
         }
     }
 
-    // 生成背景
+    /**
+     * 生成图片的背景
+    */
     private function createBackground()
     {
         $this->img = imagecreatetruecolor($this->width, $this->height);
@@ -56,20 +60,13 @@ class Captcha
         imagefilledrectangle($this->img, 0, $this->height, $this->width, 0, $color);
     }
 
-    // 生成文字
-    private function createFont()
-    {
-        $_x = ($this->width - 10) / $this->codelen;
-        for ($i = 0; $i < $this->codelen; $i ++) {
-            $this->fontcolor = imagecolorallocate($this->img, mt_rand(0, 100), mt_rand(0, 100), mt_rand(0, 100));
-            imagettftext($this->img, $this->fontsize, mt_rand(- 20, 20), $_x * $i + $_x / 3, $this->height / 1.4, $this->fontcolor, $this->font, $this->code[$i]);
-        }
-    }
-
-    // 生成线条、雪花
+    /**
+     * 在背景上生成干扰内容
+     * 随机线条 和 *
+    */
     private function createLine()
     {
-        for ($i = 0; $i < 6; $i ++) {
+        for ($i = 0; $i < 12; $i ++) {
             $color = imagecolorallocate($this->img, mt_rand(100, 200), mt_rand(100, 200), mt_rand(100, 200));
             imageline($this->img, mt_rand(0, $this->width), mt_rand(0, $this->height), mt_rand(0, $this->width), mt_rand(0, $this->height), $color);
         }
@@ -79,7 +76,22 @@ class Captcha
         }
     }
 
-    // 输出
+    /**
+     * 将随机内容写入到图片上
+    */
+    private function createFont()
+    {
+        $_x = ($this->width - 10) / $this->codelen;
+        for ($i = 0; $i < $this->codelen; $i ++) {
+            $this->fontcolor = imagecolorallocate($this->img, mt_rand(0, 100), mt_rand(0, 100), mt_rand(0, 100));
+            imagettftext($this->img, $this->fontsize, mt_rand(- 20, 20), intval($_x * $i + $_x / 3), intval($this->height / 1.4), $this->fontcolor, $this->font, $this->code[$i]);
+        }
+    }
+
+    /**
+     * 将图像对象输出为图片
+     * 释放相关资源（内存）
+    */
     private function outPut()
     {
         header('Content-type:image/png');
@@ -87,8 +99,10 @@ class Captcha
         imagedestroy($this->img);
     }
 
-    // 对外生成
-    public function doimg()
+    /**
+     * 输出验证码图像
+    */
+    public function createCodeImg()
     {
         @ob_clean(); // 清理图片输出前内容，避免生成错误！
         $this->createBackground();
@@ -98,8 +112,10 @@ class Captcha
         $this->outPut();
     }
 
-    // 获取验证码
-    public function getCode()
+    /**
+     * 获取本次生成的内容
+    */
+    public function getCode(): string
     {
         return strtolower($this->code);
     }
