@@ -20,24 +20,49 @@ class Captcha
     // 高度
     public $height = 50;
 
-    // 验证码
-    private $code;
-
-    // 图形资源句柄
-    private $img;
-
     // 指定的字体
     private $font;
 
     // 指定字体颜色
     private $fontcolor;
 
+    // 是否添加杂点
+    private $useNoise;
+
+    // 是否使用混淆曲线
+    private $useCurve;
+
+    // 验证码
+    private string $code;
+
+    // 图形资源句柄
+    private $img;
+
     // 构造方法初始化
-    public function __construct()
+    public function __construct($config)
     {
+        $this->charset  = $this->configHasKey('charset',$config)?$config['charset']:$this->charset;
+        $this->fontsize = $this->configHasKey('fontsize',$config)?$config['fontsize']:$this->fontsize;
+        $this->codelen  = $this->configHasKey('codelen',$config)?$config['codelen']:$this->codelen;
+        $this->width    = $this->configHasKey('width',$config)?$config['width']:$this->width;
+        $this->height   = $this->configHasKey('height',$config)?$config['height']:$this->charset;
+//还有四个属性未设置
         $this->font = dirname(__FILE__) . '/Font/captcha'.rand(0,5).'.ttf';
     }
-
+    /**
+     * 判断是不是存在指定的、有效的配置项
+     * @param array $config 配置数组
+     * @param string $key   配置项
+     * @return bool
+    */
+    protected function configHasKey(string $key,array $config):bool
+    {
+        if(array_key_exists($key,$config) && is_null($config[$key]))
+        {
+            return true;
+        }
+        return false;
+    }
     /**
      * 生成随机内容
     */

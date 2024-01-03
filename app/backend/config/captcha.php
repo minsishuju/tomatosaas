@@ -6,12 +6,6 @@ return [
     'codeSet'  => '2345678abcdefhijkmnpqrstuvwxyzABCDEFGHJKLMNPQRTUVWXY',
     // 验证码过期时间
     'expire'   => 1800,
-    // 是否使用中文验证码
-    'useZh'    => false,
-    // 是否使用算术验证码
-    'math'     => false,
-    // 是否使用背景图
-    'useImgBg' => false,
     //验证码字符大小
     'fontSize' => 25,
     // 是否使用混淆曲线
@@ -21,9 +15,9 @@ return [
     // 验证码字体 不设置则随机
     'fontttf'  => '',
     // 验证码图片高度
-    'imageH'   => 0,
+    'imageH'   => 40,
     // 验证码图片宽度
-    'imageW'   => 0,
+    'imageW'   => 100,
     //登录验证场景
     'login' => [
         'length'   => 4,
@@ -32,7 +26,7 @@ return [
         'useCurve' => false,
         'useNoise' => false,
         'imageW'   => 130,
-        'imageH'   => 42,
+        'imageH'   => 50,
     ]
 
 ];
