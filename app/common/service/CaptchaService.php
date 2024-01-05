@@ -4,6 +4,7 @@ namespace app\common\service;
 use think\facade\Config;
 use captcha\Captcha;
 use think\facade\Request;
+use tomato\helper\HelperArr;
 class CaptchaService
 {
     /**
@@ -15,11 +16,11 @@ class CaptchaService
         {
             throw new \think\Exception('验证码配置获取失败', 10006);
         }
-        $form = Request::server('HTTP_REFERER');
-        $host = Request::server('HTTP_HOST');
-        if ($form && strpos($form, '://' . $host) != 4 && strpos($form, '://' . $host) != 5) {
-            throw new \think\Exception('非法调用验证码', 10007);
-        }
+//        $form = Request::server('HTTP_REFERER');
+//        $host = Request::server('HTTP_HOST');
+//        if ($form && strpos($form, '://' . $host) != 4 && strpos($form, '://' . $host) != 5) {
+//            throw new \think\Exception('非法调用验证码', 10007);
+//        }
     }
     /**
      * 获取验证码配置
@@ -29,10 +30,11 @@ class CaptchaService
      */
     protected function getConfig(string $scene=''):array
     {
+        $necessary=['length','codeSet','expire','fontSize','useCurve','useNoise','fontttf','imageH','imageW'];
         // 这里添加一个数组过滤  确保返回的是一个有效的一维数组
-        if(is_null($scene))
+        if(empty($scene))
         {
-           return Config::get('captcha');
+           return array_intersect_key(Config::get('captcha'),array_flip($necessary));
         }
         if(!Config::has('captcha.'.$scene))
         {
@@ -48,6 +50,7 @@ class CaptchaService
     */
     public function create(string $scene='')
     {
+        var_dump($this->getConfig($scene));die();
         $code = new Captcha($this->getConfig($scene));
         $code->createCodeImg();
         cache('checkcode', $code->getCode());
