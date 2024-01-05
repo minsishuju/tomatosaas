@@ -21,6 +21,6 @@ class LoginController extends BaseController
     public function captcha()
     {
         $Captcha=new CaptchaService();
-        return $Captcha->create();
+        return $Captcha->create('login');
     }
 }
