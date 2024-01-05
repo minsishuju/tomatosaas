@@ -1,6 +1,7 @@
 <?php declare (strict_types=1);
 
 namespace app\common\service;
+use think\Exception;
 use think\facade\Config;
 use captcha\Captcha;
 use think\facade\Request;
@@ -16,11 +17,11 @@ class CaptchaService
         {
             throw new \think\Exception('验证码配置获取失败', 10006);
         }
-//        $form = Request::server('HTTP_REFERER');
-//        $host = Request::server('HTTP_HOST');
-//        if ($form && strpos($form, '://' . $host) != 4 && strpos($form, '://' . $host) != 5) {
-//            throw new \think\Exception('非法调用验证码', 10007);
-//        }
+        $form = Request::server('HTTP_REFERER');
+        $host = Request::server('HTTP_HOST');
+        if ($form && strpos($form, '://' . $host) != 4 && strpos($form, '://' . $host) != 5) {
+            throw new \think\Exception('非法调用验证码', 10007);
+        }
     }
     /**
      * 获取验证码配置
@@ -30,7 +31,7 @@ class CaptchaService
      */
     protected function getConfig(string $scene=''):array
     {
-        $necessary=['length','codeSet','expire','fontSize','useCurve','useNoise','fontttf','imageH','imageW'];
+        $necessary=['length','charSet','expire','fontSize','useCurve','useNoise','height','width'];
         if(empty($scene))
         {
             //移除多余数据，没有指定场景的情况下移除场景的配置数据
@@ -52,9 +53,10 @@ class CaptchaService
     */
     public function create(string $scene='')
     {
-        $code = new Captcha($this->getConfig($scene));
+        $config_data = $this->getConfig($scene);
+        $code = new Captcha($config_data);
         $code->createCodeImg();
-        cache('checkcode', $code->getCode());
+        cache('checkcode', $code->getCode(),$config_data['expire']);
     }
     /**
      * 检验验证码
