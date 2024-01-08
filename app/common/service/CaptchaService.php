@@ -1,11 +1,12 @@
 <?php declare (strict_types=1);
 
 namespace app\common\service;
+use JetBrains\PhpStorm\ArrayShape;
 use think\Exception;
 use think\facade\Config;
 use captcha\Captcha;
 use think\facade\Request;
-use tomato\helper\HelperArr;
+use think\facade\Cache;
 class CaptchaService
 {
     /**
@@ -46,23 +47,33 @@ class CaptchaService
         return array_merge(array_intersect_key(Config::get('captcha'),array_flip($necessary)),$scene_data);
     }
 
-
-
     /**
      * 生成验证码
-    */
-    public function create(string $scene='')
+     * @param string|int $captcha_name 验证码内容缓存名称
+     * @param string $scene 验证码使用场景
+     * @throws Exception
+     */
+    public function createCode(string|int $captcha_name,string $scene='')
     {
         $config_data = $this->getConfig($scene);
         $code = new Captcha($config_data);
         $code->createCodeImg();
-        cache('checkcode', $code->getCode(),$config_data['expire']);
+        Cache::set($captcha_name, $code->getCode(),$config_data['expire']);
     }
     /**
      * 检验验证码
     */
-    public function check()
+    #[ArrayShape(['err_code' => "int", 'msg' => "string"])]
+    public function checkCode(string|int $captcha_name, string|int $code): array
     {
-
+        if(!Cache::has($captcha_name))
+        {
+            return ['err_code'=>1,'msg'=>'验证码已经过期了'];
+        }
+        if(Cache::get($captcha_name)!=$code)
+        {
+            return ['err_code'=>1,'msg'=>'验证码错误，请重试'];
+        }
+        return ['err_code'=>0,'msg'=>'验证码验证通过'];
     }
 }
