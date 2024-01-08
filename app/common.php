@@ -1,6 +1,5 @@
 <?php
 // 应用公共文件
-
 use think\facade\Lang;
 
 // +----------------------------------------------------------------------
@@ -59,6 +58,16 @@ if (!function_exists('get_sys_config')) {
     }
 }
 
+if(!function_exists('build_uuid'))
+{
+    /**
+     * @param string $scene 验证码应用场景 默认为空
+    */
+    function build_uuid(string $prefix='' ,bool $more_entropy = false)
+    {
+        return uniqid($prefix, $more_entropy);
+    }
+}
 // +----------------------------------------------------------------------
 // | 文件操作函数开始
 // +----------------------------------------------------------------------
