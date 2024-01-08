@@ -21,10 +21,10 @@
 						<div class="form-center-box">
 							<div class="top-log-title">
 								<img class="top-log" src="http://www.layui-vue.com/assets/logo.685dda16.jpg" alt="" />
-								<span>Pear Admin 4.0</span>
+								<span>Tomato SAAS 1.0</span>
 							</div>
 							<div class="top-desc">
-								以 超 乎 想 象 的 速 度 构 建 内 部 工 具
+								免 费 开 源 的 基 础 SaaS 工 具
 							</div>
 							<div style="margin-top: 30px;">
 								<div class="layui-form-item">
@@ -32,36 +32,35 @@
 										<div class="layui-input-prefix">
 											<i class="layui-icon layui-icon-username"></i>
 										</div>
-										<input lay-verify="required" placeholder="账户" autocomplete="off"
-											class="layui-input">
+										<input lay-verify="required|username" placeholder="账户" name="username" autocomplete="off" class="layui-input">
 									</div>
 								</div>
+
 								<div class="layui-form-item">
 									<div class="layui-input-wrap">
 										<div class="layui-input-prefix">
 											<i class="layui-icon layui-icon-password"></i>
 										</div>
-										<input type="password" name="confirmPassword" value=""
-											lay-verify="required|confirmPassword" placeholder="密码" autocomplete="off"
-											class="layui-input" lay-affix="eye">
+										<input type="password" name="password" value="" class="layui-input" lay-affix="eye"
+											lay-verify="required|password" placeholder="密码" autocomplete="off">
 									</div>
 								</div>
+								<input type="text" name="csrf" hidden value="{$captcha}">
 								<div class="tab-log-verification">
 									<div class="verification-text">
 										<div class="layui-input-wrap">
 											<div class="layui-input-prefix">
 												<i class="layui-icon layui-icon-auz"></i>
 											</div>
-											<input lay-verify="required" placeholder="验证码" autocomplete="off"
-												class="layui-input">
+											<input lay-verify="required|captcha" placeholder="验证码" autocomplete="off" name="captcha" class="layui-input">
 										</div>
 									</div>
-									<img src="/codeimg" alt="" class="verification-img" />
+									<img src="/codeimg/{$captcha}" alt="" class="verification-img" />
 								</div>
 								<div class="layui-form-item">
 									<div class="remember-passsword">
 										<div class="remember-cehcked">
-											<input type="checkbox" name="like1[write]" lay-skin="primary" title="自动登录">
+											<input type="checkbox" name="remember" lay-skin="primary" title="记住我">
 										</div>
 									</div>
 								</div>
@@ -69,9 +68,7 @@
 									<button type="button" lay-submit lay-filter="login" class="layui-btn login">登 录</button>
 								</div>
 								<div class="other-login">
-									<div class="other-login-methods">
-										其他方式
-									</div>
+									<div class="other-login-methods">其他方式</div>
 									<div class="greenText">注册账号</div>
 								</div>
 							</div>
@@ -85,26 +82,53 @@
 	<script src="__STATIC__/layui/layui.js"></script>
 	<script src="__STATIC__/pear/pear.js"></script>
 	<script>
-		layui.use(['form', 'button', 'popup'], function () {
-			var form = layui.form;
-			var button = layui.button;
-			var popup = layui.popup;
+		layui.use(['form', 'button', 'popup','tools'], function () {
+			let form = layui.form;
+			let button = layui.button;
+			let popup = layui.popup,tools=layui.tools;
+			console.log(window.location.href)
+			form.verify({
+				username: function(value, elem){
+					if (!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)) {
+						return '用户名不能有特殊字符';
+					}
+					if (/(^_)|(__)|(_+$)/.test(value)) {
+						return '用户名首尾不能出现下划线';
+					}
+					if (/^\d+$/.test(value)) {
+						return '用户名不能全为数字';
+					}
+					if (!/^[\S]{6,16}$/.test(value)) {
+						return '用户名长度必须大于5';
+					}
+				},
+				password: function(value, elem) {
+					if (/^\d+$/.test(value)) {
+						return '密码不能全为数字';
+					}
+					if (!/^[\S]{6,16}$/.test(value)) {
+						return '密码必须为 6 到 16 位的非空字符';
+					}
+				},
+				captcha: function(value, elem) {
+					if (!new RegExp("^[a-zA-Z0-9\s·]+$").test(value)) {
+						return '验证码不能有特殊字符';
+					}
+					if (value.length !== 4) {
+						return '验证码长度错误，请输入为4个字符';
+					}
 
-			// 登 录 提 交
+				}
+			});
 			form.on('submit(login)', function (data) {
-
-				/// 验证
-
-				/// 登录
-
-				/// 动画
+				tools.submit(window.location.href,data.field,'post');
 				button.load({
 					elem: '.login',
 					time: 1500,
 					done: function () {
-						popup.success("登录成功", function () {
-							location.href = "../index.html"
-						});
+						// popup.success("登录成功", function () {
+						// 	location.href = "../index.html"
+						// });
 					}
 				})
 

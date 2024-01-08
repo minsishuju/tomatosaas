@@ -9,7 +9,13 @@ class LoginController extends BaseController
 {
     public function index()
     {
-        return view('/login/login');
+        if($this->request->isAjax())
+        {
+            $params=\request()->post();
+            var_dump($params);
+        }
+        return view('/login/login',['captcha'=>build_uuid('manage_')]);
+
     }
 
 
@@ -21,6 +27,6 @@ class LoginController extends BaseController
     public function captcha()
     {
         $Captcha=new CaptchaService();
-        return $Captcha->create('login');
+        return $Captcha->createCode(input('id'),'login');
     }
 }
