@@ -41,9 +41,9 @@ class Curl
 
 
 
-
-
-
+//https://www.cnblogs.com/ddcoder/articles/6710028.html ftp
+//https://blog.csdn.net/weixin_41728103/article/details/107645000  ftp
+//https://www.php.cn/faq/393305.html
     //析构函数
     public function __destruct()
     {
