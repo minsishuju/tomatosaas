@@ -1,17 +1,8 @@
 <?php
-// +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2006-2019 http://thinkphp.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
-// +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
-// +----------------------------------------------------------------------
-
-// [ 应用入口文件 ]
 namespace think;
-
+if (PHP_VERSION_ID < 80100) {
+    die("Your php version is " . phpversion() . '. Please upgrade php version to 8.1+');
+}
 require __DIR__ . '/../vendor/autoload.php';
 
 // 执行HTTP应用并响应
