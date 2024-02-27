@@ -12,7 +12,6 @@ class HomeController
 {
     public function index()
     {
-        $http = new Curl();
-        $http->url();
+
     }
 }
